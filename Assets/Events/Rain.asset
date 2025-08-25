@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8cbdfebd6296a2b70967b6cd3f499902, type: 3}
+  m_Name: Rain
+  m_EditorClassIdentifier: Assembly-CSharp::RainEvent
+  eventName: 
+  duration: 10
+  rainStrengthMultiplier: 0.6
+  rainGravityMultiplier: 1
+  rainPrefab: {fileID: 1008535122632487575, guid: 144b62cb887b8debaba4e5622c3f08a9, type: 3}
+  rainOverlayPrefab: {fileID: 72550172785573170, guid: 8056fbf3f9339070ab754af63f1d89a9, type: 3}
