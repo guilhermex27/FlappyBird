@@ -41,7 +41,9 @@ public class RainEvent : GameEventSO
             Canvas canvas = FindObjectOfType<Canvas>();
             rainOverlayInstance = GameObject.Instantiate(rainOverlayPrefab, canvas.transform);
             rainOverlayInstance.transform.SetAsFirstSibling();
-            // rainOverlayInstance = GameObject.Instantiate(rainOverlayPrefab);
+
+            var fader = rainOverlayInstance.GetComponent<UIFader>();
+            if (fader != null) fader.FadeIn(1f);
         }
 
     }
@@ -62,7 +64,16 @@ public class RainEvent : GameEventSO
 
         if (rainOverlayInstance != null)
         {
-            GameObject.Destroy(rainOverlayInstance);
+            var fader = rainOverlayInstance.GetComponent<UIFader>();
+            if (fader != null)
+            {
+                fader.FadeOut(1f);
+                GameObject.Destroy(rainOverlayInstance, 1.1f);
+            }
+            else
+            {
+                GameObject.Destroy(rainOverlayInstance);
+            }
         }
 
     }

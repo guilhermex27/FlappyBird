@@ -40,6 +40,7 @@ public class GameManager : MonoBehaviour
             Destroy(pipes[i].gameObject);
         }
 
+        gameEventManager.currentEventTimer = 0f;
         gameEventManager.eventInterval = Random.Range(20f, 30f);
         gameEventManager.eventTimer = gameEventManager.eventInterval;
 

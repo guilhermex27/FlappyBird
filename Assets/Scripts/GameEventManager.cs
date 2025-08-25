@@ -7,7 +7,7 @@ public class GameEventManager : MonoBehaviour
     public float eventInterval; 
     public float eventTimer;
     private GameEventSO currentEvent;
-    private float currentEventTimer;
+    public float currentEventTimer;
 
     void Start()
     {
