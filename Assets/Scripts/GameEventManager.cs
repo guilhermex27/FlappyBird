@@ -14,7 +14,6 @@ public class GameEventManager : MonoBehaviour
         eventInterval = Random.Range(20f, 30f);
         eventTimer = eventInterval;
     }
-
     void Update()
     {
         if (currentEvent == null)

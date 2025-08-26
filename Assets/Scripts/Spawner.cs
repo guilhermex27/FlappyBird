@@ -8,19 +8,26 @@ public class Spawner : MonoBehaviour
     public float minHeight = -1f;
     public float maxHeight = 1.5f;
     public float cooldownTimeRed;
+    private bool isActive = true;
     private void OnEnable()
     {
         InvokeRepeating(nameof(Spawn), spawnRate, spawnRate);
-        cooldownTimeRed = Random.Range(15.0f,30.0f);
+        cooldownTimeRed = Random.Range(15.0f, 30.0f);
     }
 
     private void OnDisable()
     {
         CancelInvoke(nameof(Spawn));
     }
+    public void SetActiveSpawner(bool value)
+    {
+        isActive = value;
+    }
 
     private void Spawn()
     {
+        if (!isActive) return;
+
         if (cooldownTimeRed > 0f)
         {
             cooldownTimeRed -= spawnRate;
@@ -29,13 +36,13 @@ public class Spawner : MonoBehaviour
         {
             GameObject pipes_red = Instantiate(prefab_pipe_red, transform.position, Quaternion.identity);
             pipes_red.transform.position += Vector3.up * Random.Range(minHeight, maxHeight);
-            cooldownTimeRed = Random.Range(15.0f,30.0f);
+            cooldownTimeRed = Random.Range(15.0f, 30.0f);
         }
         else
         {
             GameObject pipes = Instantiate(prefab_pipe_green, transform.position, Quaternion.identity);
             pipes.transform.position += Vector3.up * Random.Range(minHeight, maxHeight);
         }
-    
+
     }
 }

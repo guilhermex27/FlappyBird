@@ -9,7 +9,6 @@ public class GameManager : MonoBehaviour
     public GameObject PlayButtom;
     public GameObject gameOver;
     private int score;
-
     private void Awake() {
         Application.targetFrameRate = 60;
 
@@ -27,8 +26,13 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1f;
         player.enabled = true;
 
+        gameEventManager.currentEventTimer = 0f;
+        gameEventManager.eventInterval = Random.Range(20f, 30f);
+        gameEventManager.eventTimer = gameEventManager.eventInterval;
+
         PipesGreen[] pipesGreen = FindObjectsOfType<PipesGreen>();
-        Pipes[] pipes = FindObjectsOfType<Pipes>();
+        PipesRed[] pipes = FindObjectsOfType<PipesRed>();
+        PipesEvent[] pipesEvents = FindObjectsOfType<PipesEvent>();
 
         for (int i = 0; i < pipesGreen.Length; i++)
         {
@@ -40,9 +44,10 @@ public class GameManager : MonoBehaviour
             Destroy(pipes[i].gameObject);
         }
 
-        gameEventManager.currentEventTimer = 0f;
-        gameEventManager.eventInterval = Random.Range(20f, 30f);
-        gameEventManager.eventTimer = gameEventManager.eventInterval;
+        for (int i = 0; i < pipesEvents.Length; i++)
+        {
+            Destroy(pipesEvents[i].gameObject);
+        }
 
         spawner.cooldownTimeRed = Random.Range(15f, 30f);
     }
