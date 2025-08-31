@@ -23,7 +23,7 @@ public class TightPathEvent : GameEventSO
         Spawner spawner = GameObject.FindObjectOfType<Spawner>();
         if (spawner != null) spawner.SetActiveSpawner(false);
 
-        yield return new WaitForSeconds(0.65f);
+        yield return new WaitForSeconds(1f);
 
         float timer = 0f;
 
@@ -39,7 +39,7 @@ public class TightPathEvent : GameEventSO
             timer += spawnInterval;
         }
 
-        yield return new WaitForSeconds(0.65f);
+        yield return new WaitForSeconds(1f);
 
         if (spawner != null) spawner.SetActiveSpawner(true);
 
