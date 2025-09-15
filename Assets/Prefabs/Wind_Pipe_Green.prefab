@@ -262,7 +262,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4c2700abdeb420c686d0db6997c29c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PipeMovement
-  speed: 5
+  speed: 6
   amplitude: 0.5
   frequency: 2
 --- !u!1 &4835279940113651683

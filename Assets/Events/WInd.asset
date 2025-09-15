@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: WInd
   m_EditorClassIdentifier: Assembly-CSharp::WindEvent
   eventName: 
-  duration: 23
+  duration: 25
   windPipePrefab: {fileID: 4275041049127343196, guid: cc0404c8005213e6fbc98c2fb1f685f9, type: 3}
-  backgroundMultiplier: 4
-  groundMultiplier: 1.4
+  backgroundMultiplier: 6
+  groundMultiplier: 1.7
   spawnInterval: 1.2
   minHeight: -1
   maxHeight: 1.5

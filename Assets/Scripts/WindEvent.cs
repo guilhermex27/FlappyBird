@@ -52,7 +52,7 @@ public class WindEvent : GameEventSO
 
         float timer = 0f;
 
-        while (timer < duration)
+        while (timer < (duration - 10))
         {
             if (spawner != null)
             {
@@ -64,12 +64,9 @@ public class WindEvent : GameEventSO
             timer += spawnInterval;
         }
 
-        yield return new WaitForSeconds(8f);
+        // if (spawner != null) spawner.SetActiveSpawner(true);
 
-        if (spawner != null) spawner.SetActiveSpawner(true);
-
-        isRunning = false;
-        runningCoroutine = null;
+        // isRunning = false;
     }
     public override void EndEvent(GameEventManager eventManager)
     {

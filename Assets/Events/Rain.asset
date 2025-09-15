@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RainEvent
   eventName: 
   duration: 10
-  rainStrengthMultiplier: 0.6
+  rainStrengthMultiplier: 0.7
   rainGravityMultiplier: 1
   rainPrefab: {fileID: 1008535122632487575, guid: 144b62cb887b8debaba4e5622c3f08a9, type: 3}
   rainOverlayPrefab: {fileID: 72550172785573170, guid: 8056fbf3f9339070ab754af63f1d89a9, type: 3}
