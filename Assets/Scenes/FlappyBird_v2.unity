@@ -215,6 +215,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GameEventManager
   events:
   - {fileID: 11400000, guid: b136510980f894c32b10047e8a3a3569, type: 2}
+  - {fileID: 11400000, guid: 4c77f4089e91944e586ed90d6797b9dc, type: 2}
+  - {fileID: 11400000, guid: 4ad05443026231047a869002866648b1, type: 2}
   eventInterval: 0
   eventTimer: 0
   currentEventTimer: 0
