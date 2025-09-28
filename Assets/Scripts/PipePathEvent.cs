@@ -5,7 +5,6 @@ using System.Collections;
 public class TightPathEvent : GameEventSO
 {
     public GameObject tightPipePrefab;
-    public float eventDuration = 8f;
     public float spawnInterval = 1.2f;
     public float minHeight = -0.5f;
     public float maxHeight = 0.5f;
@@ -23,11 +22,11 @@ public class TightPathEvent : GameEventSO
         Spawner spawner = GameObject.FindObjectOfType<Spawner>();
         if (spawner != null) spawner.SetActiveSpawner(false);
 
-        yield return new WaitForSeconds(0.65f);
+        yield return new WaitForSeconds(2f);
 
         float timer = 0f;
 
-        while (timer < eventDuration)
+        while (timer < (duration - 3))
         {
             if (spawner != null)
             {
@@ -39,12 +38,6 @@ public class TightPathEvent : GameEventSO
             timer += spawnInterval;
         }
 
-        yield return new WaitForSeconds(0.65f);
-
-        if (spawner != null) spawner.SetActiveSpawner(true);
-
-        isRunning = false;
-        runningCoroutine = null;
     }
     public override void EndEvent(GameEventManager eventManager)
     {

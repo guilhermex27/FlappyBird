@@ -27,7 +27,7 @@ public class GameManager : MonoBehaviour
         player.enabled = true;
 
         gameEventManager.currentEventTimer = 0f;
-        gameEventManager.eventInterval = Random.Range(20f, 30f);
+        gameEventManager.eventInterval = Random.Range(45f,70f);
         gameEventManager.eventTimer = gameEventManager.eventInterval;
 
         PipesGreen[] pipesGreen = FindObjectsOfType<PipesGreen>();
@@ -49,7 +49,7 @@ public class GameManager : MonoBehaviour
             Destroy(pipesEvents[i].gameObject);
         }
 
-        spawner.cooldownTimeRed = Random.Range(15f, 30f);
+        spawner.cooldownTimeRed = 10f * 1.5f;
     }
 
     public void Pause()

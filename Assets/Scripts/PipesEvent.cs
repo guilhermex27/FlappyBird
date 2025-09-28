@@ -6,8 +6,8 @@ public class PipesEvent : MonoBehaviour
     private float leftEdge;
 
     [Header("Movimento Vertical")]
-    private float amplitude = 0.5f;
-    private float frequency = 0.5f;
+    private float amplitude = 0.7f;
+    private float frequency = 0.7f;
 
     private Vector3 startPos;
 

@@ -19,7 +19,6 @@ public class RainEvent : GameEventSO
 
     public override void StartEvent(GameEventManager manager)
     {
-        Debug.Log("Chuva começou");
         player = FindObjectOfType<Player>();
 
         if (player != null)
@@ -50,7 +49,6 @@ public class RainEvent : GameEventSO
 
     public override void EndEvent(GameEventManager manager)
     {
-        Debug.Log("Chuva terminou");
         if (player != null)
         {
             player.strength = originalStrength;

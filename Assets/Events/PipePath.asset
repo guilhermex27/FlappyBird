@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: PipePath
   m_EditorClassIdentifier: Assembly-CSharp::TightPathEvent
   eventName: 
-  duration: 10
+  duration: 15
   tightPipePrefab: {fileID: 4275041049127343196, guid: a2547040763663e1ea701202163e38bd, type: 3}
   eventDuration: 8
   spawnInterval: 0.5

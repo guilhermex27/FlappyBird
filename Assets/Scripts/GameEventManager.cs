@@ -11,7 +11,7 @@ public class GameEventManager : MonoBehaviour
 
     void Start()
     {
-        eventInterval = Random.Range(20f, 30f);
+        eventInterval = Random.Range(45f,70f);
         eventTimer = eventInterval;
     }
     void Update()
@@ -50,6 +50,7 @@ public class GameEventManager : MonoBehaviour
             currentEvent.EndEvent(this);
             currentEvent = null;
         }
-        eventInterval = Random.Range(20f, 30f);
+        eventInterval = Random.Range(45f, 70f);
+        eventTimer = eventInterval;
     }
 }

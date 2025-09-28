@@ -16,8 +16,12 @@ public class PipesGreen : MonoBehaviour
         leftEdge = Camera.main.ScreenToWorldPoint(Vector3.zero).x - 1f;
         startPos = transform.position;
 
-        amplitude = Random.Range(0.3f, 1f);
-        frequency = Random.Range(0.5f, 3f);
+        int nA = Random.Range(1, 3);
+        int nF = Random.Range(1, 4);
+
+        amplitude = nA * 0.5f;
+
+        frequency = nF * 0.5f;
     }
 
     private void Update()

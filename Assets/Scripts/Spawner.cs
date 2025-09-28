@@ -12,7 +12,7 @@ public class Spawner : MonoBehaviour
     private void OnEnable()
     {
         InvokeRepeating(nameof(Spawn), spawnRate, spawnRate);
-        cooldownTimeRed = Random.Range(15.0f, 30.0f);
+        cooldownTimeRed = 10f * 1.5f;
     }
 
     private void OnDisable()
@@ -36,7 +36,7 @@ public class Spawner : MonoBehaviour
         {
             GameObject pipes_red = Instantiate(prefab_pipe_red, transform.position, Quaternion.identity);
             pipes_red.transform.position += Vector3.up * Random.Range(minHeight, maxHeight);
-            cooldownTimeRed = Random.Range(15.0f, 30.0f);
+            cooldownTimeRed = 10f * 1.5f;
         }
         else
         {
