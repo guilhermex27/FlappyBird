@@ -3,6 +3,7 @@ using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
+    public FlappyAgent agent; // referência opcional
     private SpriteRenderer spriteRenderer;
     public Sprite[] sprites;
     public Sprite[] sprite_Paraquedas;
@@ -93,10 +94,16 @@ public class Player : MonoBehaviour
         if (other.gameObject.tag == "Obstacle")
         {
             FindObjectOfType<GameManager>().GameOver();
+
+            if (agent != null)
+                agent.RegisterReward("collision");
         }
         else if (other.gameObject.tag == "Scoring")
         {
             FindObjectOfType<GameManager>().IncreaseScore();
+            
+            if (agent != null)
+                agent.RegisterReward("pass_pipe");
         }
     }
 
@@ -112,4 +119,25 @@ public class Player : MonoBehaviour
         direction = Vector3.zero;
     }
 
+    public float GetGravity() => gravity;
+    public float GetStrength() => strength;
+    public float GetYPosition() => transform.position.y;
+
+    public bool IsSuspended() => isSuspended;
+
+    public void Jump()
+    {
+        direction = Vector3.up * strength;
+    }
+
+    public void OpenParachute()
+    {
+        if (cooldownTimer <= 0f)
+        {
+            isSuspended = true;
+            suspendTimer = 0.6f;
+            cooldownTimer = cooldownDuration;
+            direction.y = 0f;
+        }
+    }
 }
