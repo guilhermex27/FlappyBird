@@ -1,0 +1,62 @@
+# Unity core folders
+/[Ll]ibrary/
+/[Tt]emp/
+/[Oo]bj/
+/[Bb]uild/
+/[Bb]uilds/
+/[Ll]ogs/
+/[Uu]ser[Ss]ettings/
+/.unity/
+
+# Cache específico da Unity 6
+/[Ll]ibrary/BurstCache/
+/[Ll]ibrary/Il2cppBuildCache/
+/[Ll]ibrary/Bee/
+/[Ll]ibrary/com.unity.scriptablebuildpipeline/
+/[Ll]ibrary/com.unity.addressables/
+/[Ll]ibrary/PlayModeTests/
+/[Ll]ibrary/EditModeTests/
+
+# Addressables & Shader cache
+/[Aa]ssets/[Aa]ddressable[Aa]ssets[Dd]ata/*
+/[Aa]ssets/**/ShaderCache/
+/[Aa]ssets/**/ShaderVariantCollections/
+/[Aa]ssets/[Ss]treamingAssets/aa.meta
+/[Aa]ssets/[Ss]treamingAssets/aa/*
+
+# IDE & build system stuff
+.vscode/
+.gradle/
+ExportedObj/
+.consulo/
+*.csproj
+*.unityproj
+*.sln
+*.suo
+*.tmp
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+
+# Unity generated meta files
+*.pidb.meta
+*.pdb.meta
+*.mdb.meta
+
+# Crash/Diagnostics
+sysinfo.txt
+crashlytics-build.properties
+
+# Build outputs
+*.apk
+*.aab
+*.unitypackage
+
+/[Ll]ibrary/
+/[Ll]ibrary/**
