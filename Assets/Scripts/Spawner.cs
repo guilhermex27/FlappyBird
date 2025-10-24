@@ -9,16 +9,41 @@ public class Spawner : MonoBehaviour
     public float maxHeight = 1.5f;
     public float cooldownTimeRed;
     private bool isActive = true;
-    private void OnEnable()
+
+    private float timer = 0f;
+
+    private void Start()
     {
-        InvokeRepeating(nameof(Spawn), spawnRate, spawnRate);
+        // Resetamos o cooldown no início
         cooldownTimeRed = 10f * 1.5f;
     }
 
-    private void OnDisable()
+    // Usamos FixedUpdate em vez de OnEnable/InvokeRepeating
+    void FixedUpdate()
     {
-        CancelInvoke(nameof(Spawn));
+        // Se o spawner estiver desligado, não faz nada
+        if (!isActive) return;
+
+        // Adiciona o tempo do passo de física ao nosso timer
+        timer += Time.fixedDeltaTime;
+
+        // Se o timer atingiu a taxa de spawn
+        if (timer >= spawnRate)
+        {
+            Spawn();    // Chama a função de spawn
+            timer = 0f; // Reseta o timer
+        }
     }
+    // private void OnEnable()
+    // {
+    //     InvokeRepeating(nameof(Spawn), spawnRate, spawnRate);
+    //     cooldownTimeRed = 10f * 1.5f;
+    // }
+
+    // private void OnDisable()
+    // {
+    //     CancelInvoke(nameof(Spawn));
+    // }
     public void SetActiveSpawner(bool value)
     {
         isActive = value;

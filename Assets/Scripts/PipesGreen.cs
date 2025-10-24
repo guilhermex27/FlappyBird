@@ -11,8 +11,12 @@ public class PipesGreen : MonoBehaviour
 
     private Vector3 startPos;
 
+    private PipeController pipeController;
+
     private void Start()
     {
+        pipeController = GetComponent<PipeController>();
+
         leftEdge = Camera.main.ScreenToWorldPoint(Vector3.zero).x - 1f;
         startPos = transform.position;
 
@@ -22,6 +26,12 @@ public class PipesGreen : MonoBehaviour
         amplitude = nA * 0.5f;
 
         frequency = nF * 0.5f;
+
+        if (pipeController != null)
+        {
+            pipeController.amplitude = this.amplitude;
+            pipeController.frequency = this.frequency;
+        }
     }
 
     private void Update()

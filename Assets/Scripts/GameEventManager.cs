@@ -53,4 +53,19 @@ public class GameEventManager : MonoBehaviour
         eventInterval = Random.Range(45f, 70f);
         eventTimer = eventInterval;
     }
+
+    public GameEvent GetCurrentEvent()
+    {
+        if (currentEvent != null)
+        {
+            // Se um evento (Scriptable Object) está ativo,
+            // retorna o tipo que configuramos no Inspector.
+            return currentEvent.eventType;
+        }
+        else
+        {
+            // Se nenhum evento está ativo, retorna 'None'.
+            return GameEvent.None;
+        }
+    }
 }

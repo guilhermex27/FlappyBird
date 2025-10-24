@@ -11,10 +11,20 @@ public class PipesEvent : MonoBehaviour
 
     private Vector3 startPos;
 
+    private PipeController pipeController;
+
     private void Start()
     {
+        pipeController = GetComponent<PipeController>();
+
         leftEdge = Camera.main.ScreenToWorldPoint(Vector3.zero).x - 1f;
         startPos = transform.position;
+
+        if (pipeController != null)
+        {
+            pipeController.amplitude = this.amplitude;
+            pipeController.frequency = this.frequency;
+        }
     }
 
     private void Update()
