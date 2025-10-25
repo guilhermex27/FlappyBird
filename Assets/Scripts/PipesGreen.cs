@@ -38,8 +38,8 @@ public class PipesGreen : MonoBehaviour
     {
         transform.position += Vector3.left * speed * Time.deltaTime;
 
-        float newY = startPos.y + Mathf.Sin(Time.time * frequency) * amplitude;
-        transform.position = new Vector3(transform.position.x, newY, transform.position.z);
+        // float newY = startPos.y + Mathf.Sin(Time.time * frequency) * amplitude;
+        // transform.position = new Vector3(transform.position.x, newY, transform.position.z);
 
         if (transform.position.x < leftEdge)
         {

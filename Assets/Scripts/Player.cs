@@ -14,7 +14,7 @@ public class Player : MonoBehaviour
 
     public float gravity = -9.8f;
 
-    public float strength = 2.5f; //5
+    public float strength = 3.5f; //5
     private bool isSuspended = false;
     private float suspendTimer = 0f;
     private float cooldownTimer = 0f;
@@ -93,7 +93,7 @@ public class Player : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.tag == "Obstacle")
+        if (other.gameObject.tag == "Obstacle" || other.gameObject.tag == "Pipe")
         {
             // FindObjectOfType<GameManager>().GameOver();
             agent.Collided();
@@ -137,13 +137,18 @@ public class Player : MonoBehaviour
             direction.y = 0f;
         }
     }
-    public float GetVerticalVelocity()
+    public float GetStr()
     {
-        return direction.y;
+        return strength;
     }
     private void OnEnable()
     {
         ResetPlayer();
+    }
+
+    public bool IsSuspended()
+    {
+        return isSuspended;
     }
 
     // Esta é a nova função que faz o trabalho sujo
@@ -160,5 +165,4 @@ public class Player : MonoBehaviour
         transform.position = position;
         direction = Vector3.zero;
     }
-
 }

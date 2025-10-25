@@ -39,14 +39,15 @@ public class FlappyAgent : Agent
     }
     public void PassedPipe()
     {
-        AddReward(2.0f);
+        // AddReward(1.0f);
+        return;
     }
 public override void CollectObservations(VectorSensor sensor)
     {
         // 1. Altura do pássaro
-        sensor.AddObservation(transform.position.y / 5f);
-        // 2. Velocidade vertical do pássaro
-        sensor.AddObservation(player.GetVerticalVelocity());
+        sensor.AddObservation(transform.position.y);
+        // 2. Força do pulo
+        sensor.AddObservation(player.GetStr());
 
         PipeController closestPipe = GetClosestPipe();
 
@@ -55,31 +56,31 @@ public override void CollectObservations(VectorSensor sensor)
             // Se não há canos, adicionamos valores padrão
             sensor.AddObservation(0f);   // 3. Distância horizontal do cano
             sensor.AddObservation(0f);   // 4. Altura do vão do cano
-            sensor.AddObservation(-1f);  // 5. Tipo do cano (-1 para "nenhum")
-            sensor.AddObservation(0f);   // 6. Velocidade vertical do cano
+            // sensor.AddObservation(-1f);  // 5. Tipo do cano (-1 para "nenhum")
+            // sensor.AddObservation(0f);   // 6. Velocidade vertical do cano
             sensor.AddObservation(0f);   // 7. Velocidade horizontal do cano (NOVO!)
-            sensor.AddObservation(0f);   // 8. Amplitude de movimento do cano (NOVO!)
-            sensor.AddObservation(0f);  // 9. Frequência de movimento do cano (NOVO!)
+            // sensor.AddObservation(0f);   // 8. Amplitude de movimento do cano (NOVO!)
+            // sensor.AddObservation(0f);  // 9. Frequência de movimento do cano (NOVO!)
         }
         else
         {
             // 3. Distância horizontal até o próximo cano
             sensor.AddObservation(closestPipe.transform.position.x - transform.position.x);
             // 4. Altura do vão do próximo cano
-            sensor.AddObservation(closestPipe.transform.position.y);
+            sensor.AddObservation(closestPipe.scoringTrigger.transform.position.y);
             // 5. Tipo do próximo cano
-            sensor.AddObservation((float)closestPipe.pipeType);
+            // sensor.AddObservation((float)closestPipe.pipeType);
             // 6. Velocidade vertical do próximo cano
-            sensor.AddObservation(closestPipe.GetVerticalVelocity());
+            // sensor.AddObservation(closestPipe.GetVerticalVelocity());
             // 7. Velocidade horizontal do próximo cano (NOVO!)
-            sensor.AddObservation(closestPipe.GetHorizontalVelocity());
+            sensor.AddObservation(closestPipe.speed);
 
-            sensor.AddObservation(closestPipe.amplitude);                                    // 8. Amplitude (NOVO!)
-            sensor.AddObservation(closestPipe.frequency);
+            // sensor.AddObservation(closestPipe.amplitude);                                    // 8. Amplitude (NOVO!)
+            // sensor.AddObservation(closestPipe.frequency);
         }
 
         // 8. Estado do evento ativo
-        sensor.AddObservation((float)gameEventManager.GetCurrentEvent());
+        // sensor.AddObservation((float)gameEventManager.GetCurrentEvent());
     }
     private PipeController GetClosestPipe()
     {
@@ -107,7 +108,12 @@ public override void CollectObservations(VectorSensor sensor)
         AddReward(0.001f);
 
         PipeController closestPipe = GetClosestPipe();
-        
+
+        if (closestPipe == null || closestPipe.scoringTrigger == null)
+        {
+            return; 
+        }
+            
         float distanceToPipeX = closestPipe.transform.position.x - transform.position.x;
 
         if (distanceToPipeX < 3.0f)

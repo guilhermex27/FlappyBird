@@ -14,13 +14,16 @@ public class PipeController : MonoBehaviour
     public float frequency;
     public GameObject scoringTrigger;
     public PipeType pipeType;
+    public float speed;
     private Vector3 lastPosition;
     private float verticalVelocity;
-    private float horizontalVelocity; // <<< Variável NOVA
+    private float horizontalVelocity;
+    private PipesGreen pipesGreen;
 
     void Start()
     {
         lastPosition = transform.position;
+        pipesGreen = GetComponent<PipesGreen>();
     }
 
     void FixedUpdate()
@@ -29,10 +32,12 @@ public class PipeController : MonoBehaviour
         verticalVelocity = (transform.position.y - lastPosition.y) / Time.fixedDeltaTime;
 
         // Calcula a velocidade horizontal (para o WindEvent)
-        horizontalVelocity = (transform.position.x - lastPosition.x) / Time.fixedDeltaTime; // <<< Linha NOVA
+        horizontalVelocity = (transform.position.x - lastPosition.x) / Time.fixedDeltaTime;
 
         // Atualiza a última posição para o próximo cálculo
         lastPosition = transform.position;
+        
+        speed = pipesGreen.speed;
     }
 
     public float GetVerticalVelocity()

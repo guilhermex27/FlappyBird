@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using UnityEngine;
 
 public class Spawner : MonoBehaviour
@@ -57,17 +58,18 @@ public class Spawner : MonoBehaviour
         {
             cooldownTimeRed -= spawnRate;
         }
-        if (cooldownTimeRed <= 0f)
-        {
-            GameObject pipes_red = Instantiate(prefab_pipe_red, transform.position, Quaternion.identity);
-            pipes_red.transform.position += Vector3.up * Random.Range(minHeight, maxHeight);
-            cooldownTimeRed = 10f * 1.5f;
-        }
-        else
-        {
-            GameObject pipes = Instantiate(prefab_pipe_green, transform.position, Quaternion.identity);
-            pipes.transform.position += Vector3.up * Random.Range(minHeight, maxHeight);
-        }
+        // if (cooldownTimeRed <= 0f)
+        // {
+        //     // GameObject pipes_red = Instantiate(prefab_pipe_red, transform.position, Quaternion.identity);
+        //     // pipes_red.transform.position += Vector3.up * Random.Range(minHeight, maxHeight);
+        //     // cooldownTimeRed = 10f * 1.5f;
+            
+        // }
+        // else
+        // {
+        GameObject pipes = Instantiate(prefab_pipe_green, transform.position, Quaternion.identity);
+        pipes.transform.position += Vector3.up * Random.Range(minHeight, maxHeight);
+        // }
 
     }
 }
