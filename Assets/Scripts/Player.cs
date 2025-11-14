@@ -3,6 +3,7 @@ using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
+    private FlappyAgent agent;
     private SpriteRenderer spriteRenderer;
     public Sprite[] sprites;
     public Sprite[] sprite_Paraquedas;
@@ -12,7 +13,7 @@ public class Player : MonoBehaviour
 
     public float gravity = -9.8f;
 
-    public float strength = 2.5f; //5
+    public float strength = 3.5f; //5
     private bool isSuspended = false;
     private float suspendTimer = 0f;
     private float cooldownTimer = 0f;
@@ -21,6 +22,7 @@ public class Player : MonoBehaviour
     private void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
+        agent = GetComponent<FlappyAgent>();
     }
     private void Start()
     {
@@ -40,20 +42,6 @@ public class Player : MonoBehaviour
         }
         else
         {
-            if (Input.GetMouseButtonDown(0))
-            {
-                direction = Vector3.up * strength;
-            }
-
-            if (Input.GetKeyDown(KeyCode.Space) && cooldownTimer <= 0f)
-            {
-                isSuspended = true;
-                suspendTimer = 0.6f;
-                cooldownTimer = cooldownDuration;
-
-                direction.y = 0f;
-            }
-
             direction.y += gravity * Time.deltaTime;
         }
 
@@ -90,26 +78,59 @@ public class Player : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.tag == "Obstacle")
+        if (other.gameObject.tag == "Obstacle" || other.gameObject.tag == "Pipe")
         {
-            FindObjectOfType<GameManager>().GameOver();
+            // FindObjectOfType<GameManager>().GameOver();
+            agent.Collided();
         }
         else if (other.gameObject.tag == "Scoring")
         {
             FindObjectOfType<GameManager>().IncreaseScore();
+            agent.PassedPipe();
         }
     }
 
+    public void Jump()
+    {
+        direction = Vector3.up * strength;
+    }
+    public void OpenParachute()
+    {
+        if (cooldownTimer <= 0f)
+        {
+            isSuspended = true;
+            suspendTimer = 0.6f;
+            cooldownTimer = cooldownDuration;
+            direction.y = 0f;
+        }
+    }
+    public float GetStr()
+    {
+        return strength;
+    }
+    public float GetVerticalVelocity()
+    {
+        return direction.y;
+    }
     private void OnEnable()
+    {
+        ResetPlayer();
+    }
+
+    public bool IsSuspended()
+    {
+        return isSuspended;
+    }
+    public void ResetPlayer()
     {
         isSuspended = false;
         suspendTimer = 0f;
         cooldownTimer = 0f;
-        cooldownDuration = 10f;
+        cooldownDuration = 10f; 
+        
         Vector3 position = transform.position;
-        position.y = 0f;
+        position.y = 0.5f;
         transform.position = position;
         direction = Vector3.zero;
     }
-
 }

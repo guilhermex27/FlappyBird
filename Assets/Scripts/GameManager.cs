@@ -9,7 +9,8 @@ public class GameManager : MonoBehaviour
     public GameObject PlayButtom;
     public GameObject gameOver;
     private int score;
-    private void Awake() {
+    private void Awake()
+    {
         Application.targetFrameRate = 60;
 
         Pause();
@@ -18,43 +19,46 @@ public class GameManager : MonoBehaviour
     public void Play()
     {
         score = 0;
-        scoreText.text = score.ToString();
+        if (scoreText != null) {
+            scoreText.text = score.ToString();
+        }
 
-        PlayButtom.SetActive(false);
-        gameOver.SetActive(false);
+        if (PlayButtom != null) PlayButtom.SetActive(false);
+        if (gameOver != null) gameOver.SetActive(false);
 
-        Time.timeScale = 1f;
         player.enabled = true;
+        player.ResetPlayer();
 
-        gameEventManager.currentEventTimer = 0f;
-        gameEventManager.eventInterval = Random.Range(45f,70f);
-        gameEventManager.eventTimer = gameEventManager.eventInterval;
-
+        if (gameEventManager != null) {
+            gameEventManager.currentEventTimer = 0f;
+            gameEventManager.eventInterval = Random.Range(45f, 70f);
+            gameEventManager.eventTimer = gameEventManager.eventInterval;
+        }
+        
         PipesGreen[] pipesGreen = FindObjectsOfType<PipesGreen>();
-        PipesRed[] pipes = FindObjectsOfType<PipesRed>();
-        PipesEvent[] pipesEvents = FindObjectsOfType<PipesEvent>();
 
-        for (int i = 0; i < pipesGreen.Length; i++)
-        {
+        for (int i = 0; i < pipesGreen.Length; i++) {
             Destroy(pipesGreen[i].gameObject);
         }
 
-        for (int i = 0; i < pipes.Length; i++)
-        {
+        PipesRed[] pipes = FindObjectsOfType<PipesRed>();
+
+        for (int i = 0; i < pipes.Length; i++) {
             Destroy(pipes[i].gameObject);
         }
 
-        for (int i = 0; i < pipesEvents.Length; i++)
-        {
+        PipesEvent[] pipesEvents = FindObjectsOfType<PipesEvent>();
+        for (int i = 0; i < pipesEvents.Length; i++) {
             Destroy(pipesEvents[i].gameObject);
         }
 
-        spawner.cooldownTimeRed = 10f * 1.5f;
+        if (spawner != null) {
+            spawner.cooldownTimeRed = 10f * 1.5f;
+        }
     }
 
     public void Pause()
     {
-        Time.timeScale = 0f;
         player.enabled = false;
     }
 

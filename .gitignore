@@ -2,12 +2,12 @@
 /[Ll]ibrary/
 /[Tt]emp/
 /[Oo]bj/
-/[Bb]uild/
-/[Bb]uilds/
 /[Ll]ogs/
 /[Uu]ser[Ss]ettings/
 /.unity/
-
+*.log
+/results/
+/runs/
 # Cache específico da Unity 6
 /[Ll]ibrary/BurstCache/
 /[Ll]ibrary/Il2cppBuildCache/

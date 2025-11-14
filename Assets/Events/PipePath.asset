@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TightPathEvent
   eventName: 
   duration: 15
+  eventType: 2
   tightPipePrefab: {fileID: 4275041049127343196, guid: a2547040763663e1ea701202163e38bd, type: 3}
-  eventDuration: 8
   spawnInterval: 0.5
   minHeight: -0.5
   maxHeight: 0.5
