@@ -2,12 +2,14 @@ using UnityEngine;
 using Unity.MLAgents;
 using Unity.MLAgents.Sensors;
 using Unity.MLAgents.Actuators;
+using System.Security.AccessControl;
 
 public class FlappyAgent : Agent
 {
     private Player player;
     private GameManager gameManager;
     private GameEventManager gameEventManager;
+    private PipeController cachedClosestPipe;
     public override void Initialize()
     {
         player = GetComponent<Player>();
@@ -16,7 +18,11 @@ public class FlappyAgent : Agent
     }
     public override void OnEpisodeBegin()
     {
-        gameManager.Play();
+        if (gameManager == null)
+            gameManager = FindObjectOfType<GameManager>();
+
+        if (gameManager != null)
+            gameManager.Play();
     }
     public override void Heuristic(in ActionBuffers actionsOut)
     {
@@ -27,10 +33,6 @@ public class FlappyAgent : Agent
         {
             discreteActions[0] = 1; 
         }
-        else if (Input.GetKeyDown(KeyCode.Space))
-        {
-            discreteActions[0] = 2;
-        }
     }
     public void Collided()
     {
@@ -39,89 +41,114 @@ public class FlappyAgent : Agent
     }
     public void PassedPipe()
     {
-        // AddReward(1.0f);
+        AddReward(1.0f);
         return;
     }
-public override void CollectObservations(VectorSensor sensor)
+    public override void CollectObservations(VectorSensor sensor)
     {
-        // 1. Altura do pássaro
-        sensor.AddObservation(transform.position.y);
-        // 2. Força do pulo
-        sensor.AddObservation(player.GetStr());
+        const float maxVerticalRange = 7.5f;
+        const float maxHorizontalDist = 11.5f;
+        const float maxGapY = 4.5f;
 
-        PipeController closestPipe = GetClosestPipe();
+        float normalizedY, distToPipe, pipeGapY, normalizedVelocity;
+        float rawBirdY, rawVerticalVelocity;
+        float rawDistToPipe = 0f;
+        float rawPipeGapY = 0f;
 
-        if (closestPipe == null)
+        var closestPipe = cachedClosestPipe;
+
+        rawBirdY = transform.position.y;
+        normalizedY = Mathf.Clamp(rawBirdY / maxVerticalRange, -1f, 1f);
+
+        if(closestPipe != null && closestPipe.transform.position.x > transform.position.x)
         {
-            // Se não há canos, adicionamos valores padrão
-            sensor.AddObservation(0f);   // 3. Distância horizontal do cano
-            sensor.AddObservation(0f);   // 4. Altura do vão do cano
-            // sensor.AddObservation(-1f);  // 5. Tipo do cano (-1 para "nenhum")
-            // sensor.AddObservation(0f);   // 6. Velocidade vertical do cano
-            sensor.AddObservation(0f);   // 7. Velocidade horizontal do cano (NOVO!)
-            // sensor.AddObservation(0f);   // 8. Amplitude de movimento do cano (NOVO!)
-            // sensor.AddObservation(0f);  // 9. Frequência de movimento do cano (NOVO!)
+            rawDistToPipe = closestPipe.transform.position.x - transform.position.x;
+            distToPipe = Mathf.Clamp(rawDistToPipe / maxHorizontalDist, -1f, 1f);
+
+            rawPipeGapY = closestPipe.scoringTrigger.transform.position.y;
+            pipeGapY = Mathf.Clamp(rawPipeGapY / maxGapY, -1f, 1f);
         }
         else
         {
-            // 3. Distância horizontal até o próximo cano
-            sensor.AddObservation(closestPipe.transform.position.x - transform.position.x);
-            // 4. Altura do vão do próximo cano
-            sensor.AddObservation(closestPipe.scoringTrigger.transform.position.y);
-            // 5. Tipo do próximo cano
-            // sensor.AddObservation((float)closestPipe.pipeType);
-            // 6. Velocidade vertical do próximo cano
-            // sensor.AddObservation(closestPipe.GetVerticalVelocity());
-            // 7. Velocidade horizontal do próximo cano (NOVO!)
-            sensor.AddObservation(closestPipe.speed);
-
-            // sensor.AddObservation(closestPipe.amplitude);                                    // 8. Amplitude (NOVO!)
-            // sensor.AddObservation(closestPipe.frequency);
+            distToPipe = 0f;
+            pipeGapY = 0f;
         }
+        
+        rawVerticalVelocity = player.GetVerticalVelocity();
+        normalizedVelocity = Mathf.Clamp(rawVerticalVelocity / 9.8f, -1f, 1f);
 
-        // 8. Estado do evento ativo
-        // sensor.AddObservation((float)gameEventManager.GetCurrentEvent());
+        sensor.AddObservation(normalizedY);
+        sensor.AddObservation(distToPipe);
+        sensor.AddObservation(pipeGapY);
+        sensor.AddObservation(normalizedVelocity);
+
+        // --- 5. CÓDIGO DE DEBUG (USANDO AS VARIÁVEIS LOCAIS) ---
+        if (StepCount % 1 == 0)
+        {
+            var logBuilder = new System.Text.StringBuilder();
+            logBuilder.AppendLine($"--- OBS (Frame {StepCount}) ---");
+            logBuilder.AppendLine($"1. Bird Y (Global): {normalizedY:F3} (Raw: {rawBirdY:F2})");
+            
+            if (closestPipe != null)
+            {
+                logBuilder.AppendLine($"3. Pipe Dist:       {distToPipe:F3} (Raw: {rawDistToPipe:F2})");
+                logBuilder.AppendLine($"4. Pipe Gap Y:      {pipeGapY:F3} (Raw: {rawPipeGapY:F2})");
+            }
+            else
+            {
+                logBuilder.AppendLine($"3. Pipe Dist:       {distToPipe:F3} (No Pipe)");
+                logBuilder.AppendLine($"4. Pipe Gap Y:      {pipeGapY:F3} (No Pipe)");
+            }
+
+            logBuilder.AppendLine($"7. Bird V-Vel:      {normalizedVelocity:F3} (Raw: {rawVerticalVelocity:F2})");
+            logBuilder.AppendLine($"-----------------------");
+
+            Debug.Log(logBuilder.ToString());
+        }
     }
     private PipeController GetClosestPipe()
     {
-        GameObject[] pipes = GameObject.FindGameObjectsWithTag("Pipe");
         PipeController closest = null;
         float closestDistance = float.MaxValue;
 
-        if (pipes.Length == 0) return null;
-
-        foreach (var pipe in pipes)
+        foreach (var pipe in PipeController.activePipes)
         {
-            if (pipe == null) continue;
-
+            if (pipe == null || pipe.gameObject == null) continue;
             float distance = pipe.transform.position.x - transform.position.x;
             if (distance > 0 && distance < closestDistance)
             {
                 closestDistance = distance;
-                closest = pipe.GetComponent<PipeController>();
+                closest = pipe;
             }
         }
         return closest;
     }
+
     void FixedUpdate()
     {
-        AddReward(0.001f);
+        cachedClosestPipe = GetClosestPipe();
 
-        PipeController closestPipe = GetClosestPipe();
+        if (cachedClosestPipe == null || cachedClosestPipe.scoringTrigger == null)
+            return;
 
-        if (closestPipe == null || closestPipe.scoringTrigger == null)
+        AddReward(0.0005f);
+
+        float topY = cachedClosestPipe.upperPipe.transform.position.y - 6.666667f;
+        float botY = cachedClosestPipe.lowerPipe.transform.position.y + 6.666667f;
+
+        if (transform.position.y > topY || transform.position.y < botY)
         {
-            return; 
+            AddReward(-0.005f);
         }
-            
-        float distanceToPipeX = closestPipe.transform.position.x - transform.position.x;
 
-        if (distanceToPipeX < 3.0f)
+        float distanceToPipeX = cachedClosestPipe.transform.position.x - transform.position.x;
+
+        if (distanceToPipeX < 2.0f)
         {
-            float idealPositionY = closestPipe.scoringTrigger.transform.position.y;
+            float idealPositionY = cachedClosestPipe.scoringTrigger.transform.position.y;
             float distanceToIdeal = Mathf.Abs(transform.position.y - idealPositionY);
-            float rewardForPositioning = (1.0f - Mathf.Clamp(distanceToIdeal, 0, 1)) * 0.05f;
-            
+
+            float rewardForPositioning = (1.0f - Mathf.Clamp(distanceToIdeal, 0, 1)) * 0.005f;
             AddReward(rewardForPositioning);
         }
     }
@@ -134,13 +161,7 @@ public override void CollectObservations(VectorSensor sensor)
             case 0:
                 break;
             case 1:
-                if (!player.IsSuspended())
-                {
-                    player.Jump();
-                }
-                break;
-            case 2:
-                player.OpenParachute();
+                player.Jump();
                 break;
         }
     }

@@ -3,7 +3,6 @@ using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
-    // Adicione esta linha no topo das variáveis do Player.cs
     private FlappyAgent agent;
     private SpriteRenderer spriteRenderer;
     public Sprite[] sprites;
@@ -43,20 +42,6 @@ public class Player : MonoBehaviour
         }
         else
         {
-            // if (Input.GetMouseButtonDown(0))
-            // {
-            //     direction = Vector3.up * strength;
-            // }
-
-            // if (Input.GetKeyDown(KeyCode.Space) && cooldownTimer <= 0f)
-            // {
-            //     isSuspended = true;
-            //     suspendTimer = 0.6f;
-            //     cooldownTimer = cooldownDuration;
-
-            //     direction.y = 0f;
-            // }
-
             direction.y += gravity * Time.deltaTime;
         }
 
@@ -105,24 +90,6 @@ public class Player : MonoBehaviour
         }
     }
 
-    // private void OnEnable()
-    // {
-    //     isSuspended = false;
-    //     suspendTimer = 0f;
-    //     cooldownTimer = 0f;
-    //     cooldownDuration = 10f;
-    //     Vector3 position = transform.position;
-    //     position.y = 0f;
-    //     transform.position = position;
-    //     direction = Vector3.zero;
-    // }
-
-    // Dentro de Player.cs
-
-    // A função OnEnable agora só chama o Reset
-
-    // Adicione esta função dentro de Player.cs
-
     public void Jump()
     {
         direction = Vector3.up * strength;
@@ -141,6 +108,10 @@ public class Player : MonoBehaviour
     {
         return strength;
     }
+    public float GetVerticalVelocity()
+    {
+        return direction.y;
+    }
     private void OnEnable()
     {
         ResetPlayer();
@@ -150,16 +121,13 @@ public class Player : MonoBehaviour
     {
         return isSuspended;
     }
-
-    // Esta é a nova função que faz o trabalho sujo
     public void ResetPlayer()
     {
         isSuspended = false;
         suspendTimer = 0f;
         cooldownTimer = 0f;
-        cooldownDuration = 10f; // Você pode querer manter isso ou resetar
+        cooldownDuration = 10f; 
         
-        // A parte mais importante: resetar a posição e velocidade
         Vector3 position = transform.position;
         position.y = 0.5f;
         transform.position = position;

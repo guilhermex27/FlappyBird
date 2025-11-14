@@ -1,8 +1,18 @@
 // PipeController.cs
 using UnityEngine;
-
+using System.Collections.Generic;
 public class PipeController : MonoBehaviour
 {
+    public static List<PipeController> activePipes = new List<PipeController>();
+
+    void OnEnable()
+    {
+        if (!activePipes.Contains(this)) activePipes.Add(this);
+    }
+    void OnDisable()
+    {
+        activePipes.Remove(this);
+    }
     public enum PipeType
     {
         Green = 0,
@@ -13,6 +23,8 @@ public class PipeController : MonoBehaviour
     public float amplitude;
     public float frequency;
     public GameObject scoringTrigger;
+    public GameObject upperPipe;
+    public GameObject lowerPipe;
     public PipeType pipeType;
     public float speed;
     private Vector3 lastPosition;
@@ -28,13 +40,10 @@ public class PipeController : MonoBehaviour
 
     void FixedUpdate()
     {
-        // Calcula a velocidade vertical (para canos que sobem/descem)
         verticalVelocity = (transform.position.y - lastPosition.y) / Time.fixedDeltaTime;
 
-        // Calcula a velocidade horizontal (para o WindEvent)
         horizontalVelocity = (transform.position.x - lastPosition.x) / Time.fixedDeltaTime;
 
-        // Atualiza a última posição para o próximo cálculo
         lastPosition = transform.position;
         
         speed = pipesGreen.speed;
@@ -45,7 +54,6 @@ public class PipeController : MonoBehaviour
         return verticalVelocity;
     }
 
-    // <<< Função NOVA para o agente perguntar a velocidade horizontal
     public float GetHorizontalVelocity()
     {
         return horizontalVelocity;
